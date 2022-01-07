@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h3 class="text-muted text-center mt-3">Edit User</h3>
+        <form method="POST" class="mt-4" id="edit-user" action="/users/{{ user.id }}/update">
+            {% csrf_token %}
+            <input type="hidden" id="id" value="{{ user.id }}">
+            <div class="form-group mt-3">
+                <label>Username</label>
+                <input type="text" name="username" id="id_username" value="{{ user.username }}" class="form-control">
+            </div>
+
+            <div class="form-group mt-3">
+                <label>First name</label>
+                <input type="text" name="first_name" id="id_first_name" value="{{ user.first_name }}" class="form-control">
+            </div>
+
+
+            <div class="form-group mt-3">
+                <label>Last name</label>
+                <input type="text" name="last_name" id="id_last_name" value="{{ user.last_name }}" class="form-control">
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Email</label>
+                <input type="email" name="email" id="id_email" value="{{ user.email }}" class="form-control">
+            </div>
+
+
+            <div class="form-group mt-2">
+                <input type="submit" value="Update" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#edit-user").validate({
+                rules: {
+                    "first_name": {
+                        required: true
+                    },
+                    "username": {
+                        required: true,
+                    },
+                    "email": {
+                        required: true,
+                    }
+                },
+                errorClass: 'error',
+                validClass: 'success',
+                errorElement: 'div',
+                errorPlacement: function (error, element) {
+                    if (element.hasClass("password-type")) {
+                        error.insertAfter(element.next());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+
+        })
+
+    </script>
+
+{% endblock content %}

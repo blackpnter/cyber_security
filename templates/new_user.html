@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h3 class="text-muted text-center mt-3">New User</h3>
+        <form method="POST" class="mt-4"  id="new-user" action="/users/new">
+            {% csrf_token %}
+
+            <div class="form-group mt-3">
+                <label>Username</label>
+                <input type="text" name="username" id="id_username" class="form-control">
+            </div>
+
+            <div class="form-group mt-3">
+                <label>First name</label>
+                <input type="text" name="first_name" id="id_first_name" class="form-control">
+            </div>
+
+
+            <div class="form-group mt-3">
+                <label>Last name</label>
+                <input type="text" name="last_name" id="id_last_name" class="form-control">
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Email</label>
+                <input type="email" name="email" id="id_email" class="form-control">
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Password</label>
+                <input type="password" name="password" id="id_password" class="form-control">
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Password Confirmation</label>
+                <input type="password" name="password_confirmation" id="id_password_confirmation" class="form-control">
+            </div>
+
+            <div class="form-group mt-2">
+                <input type="submit" value="Save" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#new-user").validate({
+                rules: {
+                    "first_name": {
+                        required: true
+                    },
+                    "username": {
+                        required: true,
+                    },
+                    "email": {
+                        required: true,
+                    },
+                    "password": {
+                        required: true,
+                        minlength: 10,
+                        strong_password: true
+                    },
+                    "password_confirmation": {
+                        required: true,
+                        equalTo: "#id_password"
+                    }
+                },
+                messages: {
+                    "password_confirmation": {
+                        equalTo: 'Password does not match'
+                    }
+                },
+                errorClass: 'error',
+                validClass: 'success',
+                errorElement: 'div',
+                errorPlacement: function (error, element) {
+                    if (element.hasClass("password-type")) {
+                        error.insertAfter(element.next());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+
+        })
+
+        $.validator.addMethod("strong_password", function (value, element) {
+            let password = value;
+            if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%&])(.{8,20}$)/.test(password))) {
+                return false;
+            }
+            return true;
+        }, function (value, element) {
+            let password = $(element).val();
+            if (!(/^(.{8,20}$)/.test(password))) {
+                return 'Password must be between 10 to 20 characters long.';
+            } else if (!(/^({{ upper_case }})/.test(password))) {
+                return 'Password must contain at least one uppercase.';
+            } else if (!(/^({{ lower_case }})/.test(password))) {
+                return 'Password must contain at least one lowercase.';
+            } else if (!(/^({{ password_digit }})/.test(password))) {
+                return 'Password must contain at least one digit.';
+            } else if (!(/^({{ special_character }})/.test(password))) {
+                return "Password must contain special characters from @#$%&.";
+            }
+            return false;
+        });
+
+    </script>
+
+{% endblock content %}
