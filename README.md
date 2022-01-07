@@ -7,4 +7,4 @@ Run commands
 4) python manage.py migrate
 3) python manage.py runserver
 
-then in browser go to http://localhost:8000, your will see the app works
+then go to your browser and put this url address : http://localhost:8000, than you will see the app :)
